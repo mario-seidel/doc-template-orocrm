@@ -1,0 +1,29 @@
+version: '2'
+services:
+    web:
+        image: [repohost]/[username]/[projectname]:1.0
+        container_name: [projectname]_web
+        restart: always
+        ports:
+            - "8000:8000"
+        links:
+            - oro-db
+        volumes:
+            - logvolume01:/var/log
+        environment:
+            APP_ENV: 'prod'
+    oro-db:
+        image: mariadb:latest
+        container_name: [projectname]_db
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: 'yoursupersecretpassword'
+            MYSQL_USER: 'oro_usr'
+            MYSQL_PASSWORD: 'oro_pwd'
+            MYSQL_DATABASE: 'oro_crm'
+        volumes:
+            - /var/lib/mysql
+
+volumes:
+  logvolume01: {}
+

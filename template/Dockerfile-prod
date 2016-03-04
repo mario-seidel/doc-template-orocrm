@@ -1,0 +1,14 @@
+FROM [repohost]/[username]/orobase
+
+#USER www-data
+
+COPY ./sources /var/www/html/
+COPY ./scripts/entrypoint.sh /
+
+WORKDIR /var/www/html
+
+#run composer to build new TYPO3 project
+RUN composer.phar install --prefer-dist -o --no-dev
+
+RUN [ -f .htaccess_prod ] && mv .htaccess_prod .htaccess; chown -R www-data:www-data /var/www/html
+CMD ["/entrypoint.sh"]

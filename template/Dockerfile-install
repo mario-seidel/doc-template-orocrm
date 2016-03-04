@@ -1,0 +1,26 @@
+FROM [repohost]/[username]/orobase
+
+ARG github_oauth
+
+COPY ./sources /var/www/html
+
+WORKDIR /var/www/html
+
+#set oauth token for github and
+#run composer to build oro
+RUN composer.phar config -g github-oauth.github.com $github_oauth; \
+	composer.phar install --prefer-dist --no-dev
+
+COPY config/parameters.yml app/config/
+
+RUN touch FIRST_INSTALL
+
+#problems with local mounted volumes and user rights
+#RUN chown -R www-data:www-data /var/www
+#USER www-data
+
+EXPOSE 8000
+
+COPY ./scripts/entrypoint.sh /
+
+CMD ["/entrypoint.sh"]

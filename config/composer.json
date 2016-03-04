@@ -1,0 +1,65 @@
+{
+    "name": "oro/crm-application",
+    "description": "The OroCRM distribution",
+    "homepage": "https://github.com/orocrm/crm-application.git",
+    "license": "OSL-3.0",
+    "autoload": {
+        "psr-0": {
+            "RaB\\Bundle": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "http://packagist.orocrm.com"
+        },
+		{
+			"type" : "git",
+			"url" : "ssh://git@lannister.raborga.de:2233/RaBTools/FestivalBundle.git"
+		}
+    ],
+    "require": {
+        "oro/platform": "1.x-dev",
+        "oro/crm": "1.x-dev"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "2.5.3",
+        "phpunit/phpunit": "5.3.x-dev",
+        "phpunit/php-code-coverage": "dev-master#b8436b000263f6d72fbad1d36890e247ce84857e",
+        "symfony/phpunit-bridge": "^2.7",
+        "squizlabs/php_codesniffer": "2.*",
+        "phploc/phploc": "*",
+        "sebastian/phpcpd": "*",
+        "escapestudios/symfony2-coding-standard": "~2.0"
+    },
+    "config": {
+        "component-dir": "web/bundles/components"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setPermissions",
+            "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::installAssets",
+            "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setAssetsVersion"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
+            "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setPermissions",
+            "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::installAssets",
+            "Oro\\Bundle\\InstallerBundle\\Composer\\ScriptHandler::setAssetsVersion"
+        ]
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        }
+    }
+}
