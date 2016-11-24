@@ -1,8 +1,25 @@
 #!/bin/bash
 
-echo -e "============= starting webserver with ENV $APP_ENV ============="
+USER_ID=${HOST_USER_ID:-9001}
+USER_NAME=${HOST_USER:-user}
+GROUP_ID=${HOST_GROUP_ID:-9001}
+GROUP_NAME=${HOST_GROUP:-group}
 
-#chgrp -R www-data /var/www/html
+echo "Starting with UID: $USER_ID and GID: $GROUP_ID"
+groupadd -g $GROUP_ID -o $GROUP_NAME \
+	&& useradd --shell /bin/bash -u $USER_ID -o -c "" -g $GROUP_ID -m $USER_NAME
+export HOME=/home/$USER_NAME
+
+echo "run composer install/update"
+if [ -e composer.lock ]; then
+	php -d allow_url_fopen=on /usr/local/bin/composer.phar self-update \
+		&&	su -c 'php -d allow_url_fopen=on /usr/local/bin/composer.phar install --prefer-source' $USER_NAME
+else
+	php -d allow_url_fopen=on /usr/local/bin/composer.phar self-update \
+		&&	su -c 'php -d allow_url_fopen=on /usr/local/bin/composer.phar update --prefer-stable --prefer-source' $USER_NAME
+fi
+
+echo -e "============= starting webserver with ENV $APP_ENV ============="
 
 if [ -f FIRST_INSTALL ]; then
 	echo "Install ORO APP"
@@ -22,6 +39,8 @@ if [ -f FIRST_INSTALL ]; then
 		--no-interaction && \
 	rm -f FIRST_INSTALL
 fi
+
+rm -rf app/cache/*
 
 php app/console clank:server --env $APP_ENV &
 php app/console server:run $(/sbin/ip route|awk '/scope/ { print $9 }'):8000 --env $APP_ENV

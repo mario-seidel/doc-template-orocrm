@@ -1,8 +1,8 @@
 version: '2'
 services:
     web:
-        image: [repohost]/[username]/[projectname]:1.0
-        container_name: [projectname]_web
+        image: ###username###/###projectname###:1.0
+        container_name: ###projectname###_web
         restart: always
         ports:
             - "8000:8000"
@@ -14,7 +14,7 @@ services:
             APP_ENV: 'prod'
     oro-db:
         image: mariadb:latest
-        container_name: [projectname]_db
+        container_name: ###projectname###_db
         restart: always
         environment:
             MYSQL_ROOT_PASSWORD: 'yoursupersecretpassword'

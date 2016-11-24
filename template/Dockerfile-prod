@@ -1,4 +1,4 @@
-FROM [repohost]/[username]/orobase
+FROM [username]/orobase
 
 #USER www-data
 
