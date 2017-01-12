@@ -7,9 +7,6 @@ services:
             args:
                 github_oauth: ###github_auth####
         container_name: ###projectname###_web_local
-        restart: 'no'
-        links:
-            - nginx
         volumes:
             - './sources:/var/www/html/'
             - ./config/oro_php.ini:/usr/local/etc/php/php.ini:ro
