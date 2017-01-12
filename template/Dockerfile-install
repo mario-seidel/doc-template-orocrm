@@ -39,9 +39,9 @@ COPY ./sources /var/www/html
 WORKDIR /var/www/html
 
 #set oauth token for github and
-#run composer to build oro
-RUN composer.phar config -g github-oauth.github.com $github_oauth; \
-	composer.phar install --prefer-dist --no-dev
+#run composer to build oro - run in entrypoint.sh
+#RUN composer.phar config -g github-oauth.github.com $github_oauth; \
+#	composer.phar install --prefer-dist --no-dev
 
 COPY config/parameters.yml app/config/
 
