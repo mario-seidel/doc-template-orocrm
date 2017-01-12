@@ -1,22 +1,5 @@
 version: '2'
 services:
-    nginx:
-        image: nginx
-        container_name: nginx
-        ports:
-          - "80:80"
-        volumes:
-          - /etc/nginx/conf.d
-          - ./config/certs:/etc/nginx/certs
-
-    dockergen:
-        image: jwilder/docker-gen
-        command: -notify-sighup nginx -watch /etc/docker-gen/templates/nginx.tmpl /etc/nginx/conf.d/default.conf
-        volumes_from:
-          - nginx
-        volumes:
-          - /var/run/docker.sock:/tmp/docker.sock:ro
-          - ./config/nginx.tmpl:/etc/docker-gen/templates/nginx.tmpl
     web:
         build:
             context: .
@@ -31,7 +14,10 @@ services:
             - './sources:/var/www/html/'
             - ./config/oro_php.ini:/usr/local/etc/php/php.ini:ro
             - ./config/apache-vhost.conf:/etc/apache2/sites-enabled/000-default.conf
+            - $SSH_AUTH_SOCK:/ssh-agent
+            - /home/###hostuser###/.ssh:/home/###hostuser###/.ssh
         environment:
+            SSH_AUTH_SOCK: /ssh-agent
             APP_ENV: 'dev'
             APPLICATION_URL: http://localhost:8000
             ORGANIZATION_NAME: ###projectname###
